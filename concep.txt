@@ -1,0 +1,4 @@
+Immeuble(IdImmeuble,NumImmeuble)
+APPARTEMENT(IdAppart,#IdImmeuble,LotAppart,SurfaceAppart,TypologieAppart,EtageAppart,StatutAppart)
+ADMIN(IdAdmin,EmailAdmin,PasswordAdmin)
+RESERVATION()
