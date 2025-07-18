@@ -1,0 +1,24 @@
+# Forcing Unix-style line endings in source code
+*.ts     text eol=lf
+*.js     text eol=lf
+*.json   text eol=lf
+*.html   text eol=lf
+*.css    text eol=lf
+*.scss   text eol=lf
+*.md     text eol=lf
+*.yml    text eol=lf
+*.yaml   text eol=lf
+*.sh     text eol=lf
+
+# Treat shell scripts as executable
+*.sh     text eol=lf
+*.sh     eol=lf
+*.sh     diff
+
+# Binary files (no end-of-line conversion)
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.ico    binary
+*.pdf    binary
