@@ -39,4 +39,14 @@ export class AppartementController {
   remove(@Param('id') id: string) {
     return this.appartementService.remove(+id);
   }
+
+  @Get("statut/:statut/immeuble/:immeuble/surfaceMin/:surfaceMin/surfaceMax:surfaceMax")
+  getByStatut(
+    @Param('statut')statut: string,
+    @Param('immeuble')immeuble: number,
+    @Param('surfaceMin')surfaceMin: number,
+    @Param('surfaceMax')surfaceMax: number
+  ) {
+    return this.appartementService.getFilterAppart(statut, immeuble, surfaceMin, surfaceMax);
+  }
 }

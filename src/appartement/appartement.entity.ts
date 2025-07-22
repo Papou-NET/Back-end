@@ -6,7 +6,7 @@ export class Appartement {
   @PrimaryGeneratedColumn()
   idAppart: number;
 
-  @ManyToOne(() => Immeuble, (immeuble) => immeuble.appartements)
+  @ManyToOne(() => Immeuble, (immeuble) => immeuble.appartements , {eager: true})
   immeuble: Immeuble;
 
   @Column()

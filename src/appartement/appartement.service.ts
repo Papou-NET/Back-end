@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { Appartement } from './appartement.entity';
 import { CreateAppartementDto } from './dto/create-appartement.dto';
 import { UpdateAppartementDto } from './dto/update-appartement.dto';
@@ -63,4 +63,35 @@ export class AppartementService {
     if (result.affected === 0)
       throw new NotFoundException('Appartement non trouvé');
   }
+
+  // Option de filtrage
+  // Apprartement libre d'un immeuble
+  async getFilterAppart(statut?: string, immeuble?: number, surfaceMin?: number, surfaceMax?: number) {
+    const where: any = {};
+  
+    if (statut !== "Tous") {
+      where.statutAppart = statut;
+    }
+  
+    if (immeuble !== 0) {
+      where.immeuble = { idImmeuble: immeuble };
+    }
+
+    if (
+      surfaceMin !== undefined &&
+      surfaceMax !== undefined &&
+      surfaceMin !== 0 &&
+      surfaceMax !== 0
+    ) {
+      where.surfaceAppart = Between(surfaceMin, surfaceMax);
+    } else if (surfaceMin !== undefined && surfaceMin !== 0 ) {
+      where.surfaceAppart = { $gte: surfaceMin }; // ou { moreThanOrEqual: surfaceMin }
+    } else if (surfaceMax !== undefined && surfaceMax !== 0) {
+      where.surfaceAppart = { $lte: surfaceMax }; // ou { lessThanOrEqual: surfaceMax }
+    }
+  
+
+    return this.appartementRepository.find({ where });
+  }
+  
 }
