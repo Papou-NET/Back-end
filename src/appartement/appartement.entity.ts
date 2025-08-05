@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { Immeuble } from 'src/immeuble/immeuble.entity';
+import { Reservation } from 'src/reservation/entity/reservation.entity';
 
 @Entity()
 export class Appartement {
@@ -8,6 +9,16 @@ export class Appartement {
 
   @ManyToOne(() => Immeuble, (immeuble) => immeuble.appartements , {eager: true})
   immeuble: Immeuble;
+
+  @OneToMany(
+    type => Reservation,
+    (reservation) => reservation.appartement,
+    {
+      nullable: true,
+      cascade: true
+    }
+  )
+  reservations: Reservation[]
 
   @Column()
   lotAppart: string;

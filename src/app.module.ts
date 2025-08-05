@@ -7,7 +7,12 @@ import { Appartement } from './appartement/appartement.entity';
 
 import { ImmeubleModule } from './immeuble/immeuble.module';
 import { AppartementModule } from './appartement/appartement.module';
+import { ClientModule } from './client/client.module';
 import * as dotenv from 'dotenv';
+import { Client } from './client/entity/client.entity';
+import { ReservationController } from './reservation/reservation.controller';
+import { ReservationModule } from './reservation/reservation.module';
+import { Reservation } from './reservation/entity/reservation.entity';
 dotenv.config();
 
 @Module({
@@ -23,11 +28,14 @@ dotenv.config();
       username: process.env.DB_USERNAME,
       password: String(process.env.DB_PASSWORD),
       database: process.env.DB_NAME,
-      entities: [Immeuble, Appartement],
+      entities: [Immeuble, Appartement, Client, Reservation],
       synchronize: true, // attention à mettre false en production
     }),
     ImmeubleModule,
     AppartementModule,
+    ClientModule,
+    ReservationModule,
   ],
+  controllers: [],
 })
 export class AppModule {}
