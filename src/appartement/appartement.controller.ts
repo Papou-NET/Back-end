@@ -6,11 +6,15 @@ import {
   Param,
   Patch,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { AppartementService } from './appartement.service';
 import { CreateAppartementDto } from './dto/create-appartement.dto';
 import { UpdateAppartementDto } from './dto/update-appartement.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/admin/guards/jwt-auth.guards';
 
+@ApiBearerAuth()
 @Controller('appartements')
 export class AppartementController {
   constructor(private readonly appartementService: AppartementService) {}
@@ -31,11 +35,13 @@ export class AppartementController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   update(@Param('id') id: string, @Body() dto: UpdateAppartementDto) {
     return this.appartementService.update(+id, dto);
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: string) {
     return this.appartementService.remove(+id);
   }

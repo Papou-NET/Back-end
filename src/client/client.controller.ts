@@ -1,9 +1,12 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { ClientService } from './client.service';
 import { Client } from './entity/client.entity';
 import { CreateClientDTO } from './dto/create-client.dto';
 import { UpdateClientDTO } from './dto/update-client.dto';
+import { JwtAuthGuard } from 'src/admin/guards/jwt-auth.guards';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth() 
 @Controller('client')
 export class ClientController {
 
@@ -12,11 +15,13 @@ export class ClientController {
     ){}
 
     @Get()
+    @UseGuards(JwtAuthGuard)
     async getAll(): Promise<Client[]> {
         return await this.clientService.getAll()
     }
 
     @Get(':id')
+    @UseGuards(JwtAuthGuard)
     async getById(
         @Param('id', ParseIntPipe)id: number
     ): Promise<Client> {
@@ -24,6 +29,7 @@ export class ClientController {
     }
 
     @Post()
+    @UseGuards(JwtAuthGuard)
     async create(
         @Body() data: CreateClientDTO
     ): Promise<Client> {
@@ -31,6 +37,7 @@ export class ClientController {
     }
 
     @Patch(':id')
+    @UseGuards(JwtAuthGuard)
     async update(
         @Param('id', ParseIntPipe)id: number,
         @Body() data: UpdateClientDTO
@@ -39,6 +46,7 @@ export class ClientController {
     }
 
     @Delete(':id')
+    @UseGuards(JwtAuthGuard)
     async delete(
         @Param('id', ParseIntPipe)id: number
     ) {

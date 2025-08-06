@@ -1,9 +1,12 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { ReservationService } from './reservation.service';
 import { Reservation } from './entity/reservation.entity';
 import { CreateReservationDTO } from './dto/create-reservation.dto';
 import { UpdateReservationDTO } from './dto/update-reservation.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/admin/guards/jwt-auth.guards';
 
+@ApiBearerAuth()
 @Controller('reservation')
 export class ReservationController {
 
@@ -12,11 +15,13 @@ export class ReservationController {
     ){}
 
     @Get()
+    @UseGuards(JwtAuthGuard)
     async getAll(): Promise<Reservation[]>{
         return await this.reservationService.getAll()
     }
 
     @Get(':id')
+    @UseGuards(JwtAuthGuard)
     async getById(
         @Param('id', ParseIntPipe) id: number
     ): Promise<Reservation>{
@@ -24,6 +29,7 @@ export class ReservationController {
     }
 
     @Post()
+    @UseGuards(JwtAuthGuard)
     async add(
         @Body() data: CreateReservationDTO
     ): Promise<Reservation> {
@@ -31,6 +37,7 @@ export class ReservationController {
     }
     
     @Patch(':id')
+    @UseGuards(JwtAuthGuard)
     async update(
         @Param('id', ParseIntPipe)id: number,
         @Body() data: UpdateReservationDTO
@@ -39,6 +46,7 @@ export class ReservationController {
     }
 
     @Delete(':id')
+    @UseGuards(JwtAuthGuard)
     async delete(
         @Param('id', ParseIntPipe)id: number
     ) {

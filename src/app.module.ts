@@ -13,6 +13,8 @@ import { Client } from './client/entity/client.entity';
 import { ReservationController } from './reservation/reservation.controller';
 import { ReservationModule } from './reservation/reservation.module';
 import { Reservation } from './reservation/entity/reservation.entity';
+import { AdminModule } from './admin/admin.module';
+import { AdminEntity } from './admin/entity/admin.entity';
 dotenv.config();
 
 @Module({
@@ -28,13 +30,14 @@ dotenv.config();
       username: process.env.DB_USERNAME,
       password: String(process.env.DB_PASSWORD),
       database: process.env.DB_NAME,
-      entities: [Immeuble, Appartement, Client, Reservation],
+      entities: [Immeuble, Appartement, Client, Reservation, AdminEntity],
       synchronize: true, // attention à mettre false en production
     }),
     ImmeubleModule,
     AppartementModule,
     ClientModule,
     ReservationModule,
+    AdminModule,
   ],
   controllers: [],
 })
