@@ -9,6 +9,6 @@ export class Immeuble {
   @Column()
   numImmeuble: string;
 
-  @OneToMany(() => Appartement, (appartement) => appartement.immeuble)
+  @OneToMany(() => Appartement, (appartement) => appartement.immeuble, {cascade: true})
   appartements: Appartement[];
 }

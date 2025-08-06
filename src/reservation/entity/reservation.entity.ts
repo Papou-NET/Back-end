@@ -40,7 +40,7 @@ export class Reservation {
         {
             nullable: true,
             eager: true,
-            cascade: ['insert', 'update']
+            onDelete:'CASCADE'
         }
     )
     client: Client
@@ -51,7 +51,7 @@ export class Reservation {
         {
             nullable: true,
             eager: true,
-            cascade: ['insert', 'update']
+            onDelete:'CASCADE'
         }
     )
     appartement: Appartement
