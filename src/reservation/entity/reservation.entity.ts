@@ -1,7 +1,7 @@
 import { Appartement } from "src/appartement/appartement.entity";
 import { Client } from "src/client/entity/client.entity";
 import { TypeOffreEnum } from "src/enums/type-offre.enum";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('reservation')
 export class Reservation {
@@ -33,6 +33,9 @@ export class Reservation {
         nullable: true
     })
     dateVente: Date
+
+    @CreateDateColumn()
+    createdAt: Date
 
     @ManyToOne(
         type => Client,

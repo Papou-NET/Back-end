@@ -7,6 +7,7 @@ import {
   Patch,
   Delete,
   UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { AppartementService } from './appartement.service';
 import { CreateAppartementDto } from './dto/create-appartement.dto';
@@ -27,6 +28,18 @@ export class AppartementController {
   @Get()
   findAll() {
     return this.appartementService.findAll();
+  }
+
+  @Get("count")
+  async countAppart():Promise<number> {
+      return await this.appartementService.countAppart()
+  }
+
+  @Get("count/:status")
+  async countAppartByStatus(
+    @Param('status') status: string
+  ):Promise<number> {
+      return await this.appartementService.countPerStatus(status)
   }
 
   @Get(':id')
@@ -55,4 +68,5 @@ export class AppartementController {
   ) {
     return this.appartementService.getFilterAppart(statut, immeuble, surfaceMin, surfaceMax);
   }
+
 }

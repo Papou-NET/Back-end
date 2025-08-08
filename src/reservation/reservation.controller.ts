@@ -20,6 +20,18 @@ export class ReservationController {
         return await this.reservationService.getAll()
     }
 
+    @Get("lastFour")
+    async getLastFour(): Promise<Reservation[]> {
+      return await this.reservationService.getLastFourReservation();
+    }
+
+    @Get("appartement/:id")
+    async getByAppartement(
+      @Param('id', ParseIntPipe) id: number
+    ) {
+      return await this.reservationService.getByAppartement(id);
+    }
+
     @Get(':id')
     @UseGuards(JwtAuthGuard)
     async getById(

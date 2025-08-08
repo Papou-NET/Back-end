@@ -20,6 +20,14 @@ export class ClientController {
         return await this.clientService.getAll()
     }
 
+    @Get('search/:nom')
+    @UseGuards(JwtAuthGuard)
+    async search(
+        @Param('nom') nom: string
+    ): Promise<Client[]> {
+        return await this.clientService.search(nom)
+    }
+
     @Get(':id')
     @UseGuards(JwtAuthGuard)
     async getById(

@@ -64,6 +64,16 @@ export class AppartementService {
       throw new NotFoundException('Appartement non trouvé');
   }
 
+  async countAppart(): Promise<number> {
+    return await this.appartementRepository.count()
+  }
+
+  async countPerStatus(status: string): Promise<number> {
+    return await this.appartementRepository.count({
+      where : {statutAppart : status}
+    })
+  }
+
   // Option de filtrage
   // Apprartement libre d'un immeuble
   async getFilterAppart(statut?: string, immeuble?: number, surfaceMin?: number, surfaceMax?: number) {

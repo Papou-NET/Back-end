@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Client } from './entity/client.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreateClientDTO } from './dto/create-client.dto';
 import { UpdateClientDTO } from './dto/update-client.dto';
 
@@ -42,6 +42,12 @@ export class ClientService {
     async removeClient(id: number) {
         const client = await this.getById(id);
         return await this.clientRepository.remove(client);
+    }
+
+    async search(nom: string) {
+        return await this.clientRepository.createQueryBuilder('client')
+        .where('client.nom ILIKE :nom', { nom: `%${nom}%` })
+        .getMany()
     }
 
 }

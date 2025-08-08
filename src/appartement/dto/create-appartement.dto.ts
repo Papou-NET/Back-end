@@ -1,4 +1,6 @@
-import { IsInt, IsString, IsNumber, IsIn, IsNotEmpty } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsInt, IsString, IsNumber, IsIn, IsNotEmpty, IsOptional } from 'class-validator';
+import { Immeuble } from 'src/immeuble/immeuble.entity';
 
 export class CreateAppartementDto {
   // Removed duplicate declaration of idImmeuble
@@ -27,4 +29,9 @@ export class CreateAppartementDto {
   @IsNotEmpty()
   @IsIn(['Disponible', 'Vendu', 'Réservé']) // Example of allowed values
   statutAppart: string;
+
+  @IsOptional()
+  @Type(()=>Immeuble)
+  immeuble: Immeuble;
+
 }
