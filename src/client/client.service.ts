@@ -17,6 +17,17 @@ export class ClientService {
         return await this.clientRepository.find()
     }
 
+    async getPagined(limit:number, page:number) {
+        const [data, total] = await this.clientRepository.findAndCount({
+            skip: (page - 1) * limit,
+            take: limit
+        })
+        return {
+            data,
+            total: total
+        }
+    }
+
     async getById(id: number): Promise<Client> {
         const client = await this.clientRepository.findOne({ where: {id: id} });
         if(!client) {

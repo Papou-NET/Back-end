@@ -69,13 +69,49 @@ export class ReservationService {
         .where('reservation.reference ILIKE :reference', { reference: `%${reference}%` })
         .getMany()
     }
-    
 
-    // async getLocationPerMonth() {
-    //     return await this.reservationRepository.count({
-    //         where: {}
-    //     })
-    // }
+    async getReservationPerMonth(annee: number) {
+        const location = await this.reservationRepository.createQueryBuilder('reservation')
+        .select("EXTRACT(MONTH FROM reservation.dateDeb)", "mois")
+        .addSelect("COUNT(*)", "total")
+        .where("reservation.type = :location", {location: 'location'})
+        .andWhere("EXTRACT(YEAR FROM reservation.dateDeb) = :annee", {annee})
+        .groupBy("mois")
+        .orderBy("mois")
+        .getRawMany();
 
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluMSIsImVtYWlsIjoiYWRtaW4xQGdtYWlsLmNvbSIsImlhdCI6MTc1NDYxNzQzNSwiZXhwIjoxNzU0NjIxMDM1fQ.UVeWUcAYHj9cIw-p6tzgP-0a4Pqxes4VayIJlf3X5vk
+        const vente = await this.reservationRepository.createQueryBuilder('reservation')
+        .select("EXTRACT(MONTH FROM reservation.dateVente)", "mois")
+        .addSelect("COUNT(*)", "total")
+        .where("reservation.type = :vente", {vente: 'vente'})
+        .andWhere("EXTRACT(YEAR FROM reservation.dateVente) = :annee", {annee})
+        .groupBy("mois")
+        .orderBy("mois")
+        .getRawMany();
+
+        const months = ['jan', 'feb', 'mar', 'apr', 'mai','jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+
+        let data:any = []
+        for(let i=0; i < months.length; i++) {
+            data.push({
+                name: months[i],
+                location: 0,
+                vente: 0
+            })
+        }
+
+        for(let j=0; j < location.length; j++) {
+            const idx = Number(location[j].mois) - 1
+            data[idx].location = location[j].total
+        }
+
+        for(let j=0; j < vente.length; j++) {
+            const idx = Number(vente[j].mois) - 1
+            data[idx].vente = vente[j].total
+        }
+
+        return data
+
+    }
+
 }

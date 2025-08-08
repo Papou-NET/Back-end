@@ -19,10 +19,17 @@ export class ReservationController {
     async getAll(): Promise<Reservation[]>{
         return await this.reservationService.getAll()
     }
-
+    
     @Get("lastFour")
     async getLastFour(): Promise<Reservation[]> {
       return await this.reservationService.getLastFourReservation();
+    }
+
+    @Get("reservationParMois/:annee")
+    async getReservationParMois(
+        @Param('annee', ParseIntPipe) annee: number
+    ) {
+      return await this.reservationService.getReservationPerMonth(annee);
     }
 
     @Get("search/:reference")
