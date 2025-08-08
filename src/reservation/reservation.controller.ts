@@ -25,6 +25,13 @@ export class ReservationController {
       return await this.reservationService.getLastFourReservation();
     }
 
+    @Get("search/:reference")
+    async searchReservation(
+        @Param('reference') reference: string
+    ):Promise<Reservation[]> {
+        return await this.reservationService.search(reference)
+    }
+
     @Get("appartement/:id")
     async getByAppartement(
       @Param('id', ParseIntPipe) id: number

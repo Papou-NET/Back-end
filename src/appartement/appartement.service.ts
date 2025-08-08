@@ -76,6 +76,7 @@ export class AppartementService {
 
   async search(lotAppart: string): Promise<Appartement[]> {
     return await this.appartementRepository.createQueryBuilder('appartement')
+    .leftJoinAndSelect('appartement.immeuble', 'immeuble')
     .where('appartement.lotAppart ILIKE :lotAppart', { lotAppart: `%${lotAppart}%` })
     .getMany()
 }

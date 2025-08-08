@@ -62,6 +62,13 @@ export class ReservationService {
         })
     }
 
+    async search(reference: string): Promise<Reservation[]> {
+        return await this.reservationRepository.createQueryBuilder('reservation')
+        .leftJoinAndSelect('reservation.appartement', 'appartement')
+        .leftJoinAndSelect('reservation.client', 'client')
+        .where('reservation.reference ILIKE :reference', { reference: `%${reference}%` })
+        .getMany()
+    }
     
 
     // async getLocationPerMonth() {
