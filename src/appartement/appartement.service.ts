@@ -74,6 +74,12 @@ export class AppartementService {
     })
   }
 
+  async search(lotAppart: string): Promise<Appartement[]> {
+    return await this.appartementRepository.createQueryBuilder('appartement')
+    .where('appartement.lotAppart ILIKE :lotAppart', { lotAppart: `%${lotAppart}%` })
+    .getMany()
+}
+
   // Option de filtrage
   // Apprartement libre d'un immeuble
   async getFilterAppart(statut?: string, immeuble?: number, surfaceMin?: number, surfaceMax?: number) {

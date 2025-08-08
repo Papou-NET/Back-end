@@ -44,7 +44,7 @@ export class ClientService {
         return await this.clientRepository.remove(client);
     }
 
-    async search(nom: string) {
+    async search(nom: string): Promise<Client[]> {
         return await this.clientRepository.createQueryBuilder('client')
         .where('client.nom ILIKE :nom', { nom: `%${nom}%` })
         .getMany()

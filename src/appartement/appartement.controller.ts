@@ -14,6 +14,7 @@ import { CreateAppartementDto } from './dto/create-appartement.dto';
 import { UpdateAppartementDto } from './dto/update-appartement.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/admin/guards/jwt-auth.guards';
+import { Appartement } from './appartement.entity';
 
 @ApiBearerAuth()
 @Controller('appartements')
@@ -40,6 +41,13 @@ export class AppartementController {
     @Param('status') status: string
   ):Promise<number> {
       return await this.appartementService.countPerStatus(status)
+  }
+
+  @Get("search/:lot")
+  async searchAppart(
+    @Param('lot') lot: string
+  ):Promise<Appartement[]> {
+    return await this.appartementService.search(lot)
   }
 
   @Get(':id')
