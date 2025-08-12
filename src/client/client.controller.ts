@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ClientService } from './client.service';
 import { Client } from './entity/client.entity';
 import { CreateClientDTO } from './dto/create-client.dto';
 import { UpdateClientDTO } from './dto/update-client.dto';
 import { JwtAuthGuard } from 'src/admin/guards/jwt-auth.guards';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiBearerAuth() 
 @Controller('client')

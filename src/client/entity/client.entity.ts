@@ -29,7 +29,7 @@ export class Client {
 
   @Column()
   codePostal: string;
-
+  
   @OneToMany(
     type => Reservation,
     (reservation) => reservation.client,
