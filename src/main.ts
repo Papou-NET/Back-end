@@ -11,7 +11,7 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '..', 'uploads'))
 
   app.enableCors({
-    origin: ['http://localhost:5173', 'https://bades-manager.onrender.com/'],
+    origin: ['http://localhost:5173', 'https://bades-manager.onrender.com'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE'
   });
 
