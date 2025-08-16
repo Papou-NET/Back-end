@@ -20,6 +20,12 @@ export class ReservationController {
         return await this.reservationService.getAll()
     }
     
+    @Get("updateAppartementDisponible")
+    @UseGuards(JwtAuthGuard)
+    async updateAppartToDisponible(){
+        return await this.reservationService.updateAppartsDisponibles()
+    }
+
     @Get("lastFour")
     async getLastFour(): Promise<Reservation[]> {
       return await this.reservationService.getLastFourReservation();

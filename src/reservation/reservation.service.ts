@@ -1,21 +1,51 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reservation } from './entity/reservation.entity';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { CreateReservationDTO } from './dto/create-reservation.dto';
 import { UpdateReservationDTO } from './dto/update-reservation.dto';
+import { Appartement } from 'src/appartement/appartement.entity';
+import { TypeOffreEnum } from 'src/enums/type-offre.enum';
 
 @Injectable()
 export class ReservationService {
 
     constructor(
         @InjectRepository(Reservation)
-        private reservationRepository: Repository<Reservation>
+        private reservationRepository: Repository<Reservation>,
+
+        @InjectRepository(Appartement)
+        private appartRepository: Repository<Appartement>
     ){}
 
     async getAll(): Promise<Reservation[]> {
-        return await this.reservationRepository.find()
+        const reservations = await this.reservationRepository.find() 
+
+        return reservations
     }
+
+    async updateAppartsDisponibles() {
+        // 1️⃣ Début et fin de la date actuelle
+        const todayStart = new Date();
+        todayStart.setHours(0, 0, 0, 0);
+    
+        const todayEnd = new Date();
+        todayEnd.setHours(23, 59, 59, 999);
+    
+        // 2️⃣ Récupérer les réservations avec dateFin = aujourd'hui
+        const reservations = await this.reservationRepository.find({
+          where: { dateFin: Between(todayStart, todayEnd) },
+        });
+    
+        // 3️⃣ Mettre à jour les appartements liés
+        for (const reservation of reservations) {
+          await this.appartRepository.update(reservation.appartement, {
+            statutAppart: 'Disponible',
+          });
+        }
+    
+        return { message: `${reservations.length} appartements mis à jour` };
+      }
 
     async getById(id: number): Promise<Reservation> {
         const reservation = await this.reservationRepository.findOne({ where: {id: id} });
@@ -28,6 +58,20 @@ export class ReservationService {
     }
 
     async addReservation(data: CreateReservationDTO): Promise<Reservation> {
+        const idAppart:any = data.appartement
+        let appartement = await this.appartRepository.findOne({
+            where: { idAppart }
+        })
+        if(appartement) {
+
+            if(data.type === TypeOffreEnum.LOCATION) {
+                appartement.statutAppart = "Réservé"
+            }
+            else if(data.type === TypeOffreEnum.VENTE) {
+                appartement.statutAppart = "Vendu"
+            }
+            await this.appartRepository.save(appartement)
+        }
         return await this.reservationRepository.save(data)
     }
 
@@ -37,6 +81,7 @@ export class ReservationService {
             throw new NotFoundException(`Le client d'id ${id} n'existe pas`)
         }
         return await this.reservationRepository.save(reservation);
+
     }
 
     async removeReservation(id: number) {
